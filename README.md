@@ -9,10 +9,10 @@ MoonPy has no runtime dependencies and requires Python 3.14 or later.
 ```python
 from datetime import UTC, datetime
 
-from moonpy import MoonPy
+from moonpy import MoonPhase
 
-moon = MoonPy()  # now
-moon = MoonPy(datetime(2024, 1, 25, 17, 54, tzinfo=UTC))
+moon = MoonPhase()  # now
+moon = MoonPhase(datetime(2024, 1, 25, 17, 54, tzinfo=UTC))
 
 moon.name  # 'Full Moon'
 moon.illumination  # 0.999 (0 = dark, 1 = fully lit)
@@ -22,8 +22,8 @@ moon.days_to_full  # 0.36
 moon.days_to_new  # 15.13
 ```
 
-The datetime must be timezone-aware; a naive datetime raises `TypeError`. Any timezone works, and `MoonPy()` with no
-argument uses the current UTC time. `MoonPy` instances are immutable.
+The datetime must be timezone-aware; a naive datetime raises `TypeError`. Any timezone works, and `MoonPhase()` with no
+argument uses the current UTC time. `MoonPhase` instances are immutable.
 
 | Attribute        | Description                                                                            |
 |------------------|----------------------------------------------------------------------------------------|

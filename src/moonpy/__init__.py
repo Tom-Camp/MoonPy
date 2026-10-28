@@ -1,3 +1,3 @@
-from moonpy.phases import MoonPy
+from moonpy.phases import MoonPhase
 
-__all__ = ["MoonPy"]
+__all__ = ["MoonPhase"]
