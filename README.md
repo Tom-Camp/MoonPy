@@ -2,7 +2,11 @@
 
 A library for calculating the phases of the moon.
 
-MoonPy has no runtime dependencies and requires Python 3.14 or later.
+MoonPy has no runtime dependencies and requires Python 3.11 or later.
+
+```sh
+pip install moonpy
+```
 
 ## Usage
 
@@ -43,7 +47,7 @@ Full Moon, 🌖 Waning Gibbous, 🌗 Third Quarter, 🌘 Waning Crescent.
 
 MoonPy uses the mean length of a lunar month (29.530588853 days) counted from a known new moon on 2000-01-06 18:14 UTC.
 It is not an astronomical ephemeris: the real moon's orbit speeds up and slows down, so actual new and full moons can
-fall up to about 14 hours from the times predicted here. That is accurate enough for phase names and illumination, but
+fall up to about 18 hours from the times predicted here. That is accurate enough for phase names and illumination, but
 not for exact event times. In the example above, the real full moon was at 17:54 UTC, while MoonPy places it about 9
 hours later.
 
