@@ -1,8 +1,10 @@
 from dataclasses import FrozenInstanceError
 from datetime import UTC, datetime, timedelta, timezone
+from pathlib import Path
 
 import pytest
 
+import moonpy
 from moonpy import MoonPhase
 from moonpy.phases import PHASE_NAMES, REFERENCE_NEW_MOON, SYNODIC_MONTH
 
@@ -120,6 +122,57 @@ class TestName:
     )
     def test_known_dates(self, when, name):
         assert MoonPhase(when).name == name
+
+
+class TestAccuracy:
+    """Predictions stay within the README's stated error of real events.
+
+    Event times are from eclipses, which pin down the exact instant of new and
+    full moon.
+    """
+
+    MAX_ERROR_DAYS = 18 / 24
+
+    @pytest.mark.parametrize(
+        "when",
+        [
+            datetime(2017, 8, 21, 18, 30, tzinfo=UTC),
+            datetime(2019, 7, 2, 19, 16, tzinfo=UTC),
+            datetime(2024, 4, 8, 18, 21, tzinfo=UTC),
+            datetime(2026, 2, 17, 12, 1, tzinfo=UTC),
+        ],
+    )
+    def test_real_new_moons(self, when):
+        moon = MoonPhase(when)
+        assert min(moon.age, moon.days_to_new) < self.MAX_ERROR_DAYS
+
+    @pytest.mark.parametrize(
+        "when",
+        [
+            datetime(2022, 11, 8, 11, 2, tzinfo=UTC),
+            datetime(2024, 1, 25, 17, 54, tzinfo=UTC),
+            datetime(2025, 3, 14, 6, 55, tzinfo=UTC),
+            datetime(2025, 9, 7, 18, 9, tzinfo=UTC),
+        ],
+    )
+    def test_real_full_moons(self, when):
+        moon = MoonPhase(when)
+        assert abs(moon.age - SYNODIC_MONTH / 2) < self.MAX_ERROR_DAYS
+
+
+def test_readme_example():
+    moon = MoonPhase(datetime(2024, 1, 25, 17, 54, tzinfo=UTC))
+    assert moon.name == "Full Moon"
+    assert moon.illumination == pytest.approx(0.999, abs=0.001)
+    assert moon.age == pytest.approx(14.40, abs=0.01)
+    assert moon.cycle_fraction == pytest.approx(0.488, abs=0.001)
+    assert moon.days_to_full == pytest.approx(0.36, abs=0.01)
+    assert moon.days_to_new == pytest.approx(15.13, abs=0.01)
+
+
+def test_public_api():
+    assert moonpy.__all__ == ["MoonPhase"]
+    assert (Path(moonpy.__file__).parent / "py.typed").is_file()
 
 
 class TestConstruction:
